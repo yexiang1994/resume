@@ -1,0 +1,25 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "theme": "mint",
+  "name": "叶翔",
+  "description": "自动化开发工程师个人简历，聚焦工业自动化、机器视觉、PLC 控制、上位机和数据链路集成。",
+  "colors": {
+    "primary": "#12A27C"
+  },
+  "appearance": {
+    "default": "dark"
+  },
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "简历",
+        "groups": [
+          {
+            "group": "叶翔",
+            "pages": ["index", "resume", "projects", "contact"]
+          }
+        ]
+      }
+    ]
+  }
+}
