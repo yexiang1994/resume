@@ -1,0 +1,13 @@
+{
+  "name": "resume-interface",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "serve": "node server.mjs",
+    "test": "node --test test/resume-page.test.mjs"
+  },
+  "devDependencies": {
+    "playwright-core": "^1.60.0"
+  }
+}

@@ -1,0 +1,9 @@
+node_modules/
+test/chrome-profile*/
+test/*.png
+npm-debug.log*
+*.log
+.DS_Store
+Thumbs.db
+.env
+.env.*
