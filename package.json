@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "build": "node scripts/build-static.mjs",
+    "publish:static": "node scripts/publish-static-branch.mjs",
     "serve": "node server.mjs",
     "test": "node --test test/resume-page.test.mjs"
   },

@@ -28,3 +28,11 @@ npm run build
 ```
 
 静态文件会生成到 `docs/`，GitHub Pages 可选择 `main` 分支的 `/docs` 目录作为发布来源。
+
+如需直接用分支根目录部署：
+
+```bash
+npm run publish:static
+```
+
+该命令会先生成 `docs/`，再把 `docs/` 内的静态文件同步到 `gh-pages` 分支根目录并推送。

@@ -201,6 +201,17 @@ test("build script generates deployable static files in docs", () => {
   assert.match(builtHtml, /<script src="\.\/src\/resume-data\.js"><\/script>/);
 });
 
+test("publish script syncs docs to the gh-pages branch root", () => {
+  const packageJson = JSON.parse(readProjectFile("package.json"));
+  const publishScript = readProjectFile("scripts/publish-static-branch.mjs");
+
+  assert.equal(packageJson.scripts["publish:static"], "node scripts/publish-static-branch.mjs");
+  assert.match(publishScript, /const deployBranch = "gh-pages"/);
+  assert.match(publishScript, /const staticDir = join\(root, "docs"\)/);
+  assert.match(publishScript, /git\(\["rm", "-r", "-f", "--ignore-unmatch", "\."\]/);
+  assert.match(publishScript, /git\(\["push", "-u", "origin", deployBranch\]/);
+});
+
 test("layout includes responsive, image fallback, and reduced-motion safeguards", () => {
   const html = readProjectFile("index.html");
   const css = readProjectFile("src/styles.css");

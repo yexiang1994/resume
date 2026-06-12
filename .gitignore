@@ -1,4 +1,5 @@
 node_modules/
+.deploy-gh-pages/
 test/chrome-profile*/
 test/*.png
 npm-debug.log*
