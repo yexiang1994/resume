@@ -38,8 +38,17 @@ function hasDeployChanges() {
   return git(["status", "--porcelain"], { cwd: worktreeDir }).trim().length > 0;
 }
 
+function removeDeployWorktree() {
+  try {
+    git(["worktree", "remove", "--force", worktreeDir], { stdio: "inherit" });
+  } catch {
+    // The directory may exist without a registered worktree after an interrupted run.
+  }
+}
+
 execFileSync(process.execPath, ["scripts/build-static.mjs"], { cwd: root, stdio: "inherit" });
 
+removeDeployWorktree();
 git(["worktree", "prune"]);
 await rm(worktreeDir, { recursive: true, force: true });
 

@@ -208,6 +208,7 @@ test("publish script syncs docs to the gh-pages branch root", () => {
   assert.equal(packageJson.scripts["publish:static"], "node scripts/publish-static-branch.mjs");
   assert.match(publishScript, /const deployBranch = "gh-pages"/);
   assert.match(publishScript, /const staticDir = join\(root, "docs"\)/);
+  assert.match(publishScript, /git\(\["worktree", "remove", "--force", worktreeDir\]/);
   assert.match(publishScript, /git\(\["rm", "-r", "-f", "--ignore-unmatch", "\."\]/);
   assert.match(publishScript, /git\(\["push", "-u", "origin", deployBranch\]/);
 });
