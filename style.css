@@ -1,0 +1,5 @@
+#search-bar-entry,
+#search-bar-entry-mobile,
+chat-assistant-floating-input {
+  display: none !important;
+}
