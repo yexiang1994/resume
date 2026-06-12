@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>叶翔 | 自动化开发工程师</title>
+    <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="./src/styles.css" />
+  </head>
+  <body data-theme="black">
+    <div class="page-shell">
+      <header class="topbar" aria-label="简历导航">
+        <a class="brand-mark" href="#home" aria-label="回到首页">叶翔</a>
+        <nav class="site-nav" aria-label="页面区块">
+          <a href="#home">首页</a>
+          <a href="#resume">简历</a>
+          <a href="#projects">项目</a>
+          <a href="#contact">联系</a>
+        </nav>
+        <div id="themeToggle" class="theme-toggle" aria-label="选择色调">
+          <button type="button" data-theme-value="blue" aria-pressed="false">蓝色</button>
+          <button type="button" data-theme-value="black" aria-pressed="true">黑色</button>
+        </div>
+      </header>
+
+      <main id="app" class="resume-page" aria-live="polite"></main>
+    </div>
+
+    <script src="./src/resume-data.js"></script>
+    <script src="./src/app.js"></script>
+  </body>
+</html>
