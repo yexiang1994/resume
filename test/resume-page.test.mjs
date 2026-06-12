@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
-import { existsSync, readFileSync } from "node:fs";
+import { execFileSync } from "node:child_process";
+import { existsSync, readFileSync, rmSync } from "node:fs";
 import { test } from "node:test";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
@@ -174,6 +175,30 @@ test("home hero uses the local avatar image", () => {
 
   assert.equal(heroImage, "./img/avator.png");
   assert.doesNotMatch(heroImage, /images\.unsplash\.com/);
+});
+
+test("build script generates deployable static files in docs", () => {
+  const packageJson = JSON.parse(readProjectFile("package.json"));
+
+  assert.equal(packageJson.scripts.build, "node scripts/build-static.mjs");
+
+  rmSync(join(root, "docs"), { recursive: true, force: true });
+  execFileSync(process.execPath, ["scripts/build-static.mjs"], { cwd: root, stdio: "pipe" });
+
+  for (const path of [
+    "docs/index.html",
+    "docs/src/styles.css",
+    "docs/src/resume-data.js",
+    "docs/src/app.js",
+    "docs/img/avator.png",
+    "docs/.nojekyll",
+  ]) {
+    assert.equal(existsSync(join(root, path)), true, `${path} should be generated`);
+  }
+
+  const builtHtml = readProjectFile("docs/index.html");
+  assert.match(builtHtml, /<link rel="stylesheet" href="\.\/src\/styles\.css"/);
+  assert.match(builtHtml, /<script src="\.\/src\/resume-data\.js"><\/script>/);
 });
 
 test("layout includes responsive, image fallback, and reduced-motion safeguards", () => {

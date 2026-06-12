@@ -20,3 +20,11 @@ http://127.0.0.1:5180
 ```bash
 npm test
 ```
+
+## 部署
+
+```bash
+npm run build
+```
+
+静态文件会生成到 `docs/`，GitHub Pages 可选择 `main` 分支的 `/docs` 目录作为发布来源。
