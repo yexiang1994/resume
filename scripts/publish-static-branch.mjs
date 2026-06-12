@@ -5,7 +5,7 @@ import { execFileSync } from "node:child_process";
 
 const root = dirname(dirname(fileURLToPath(import.meta.url)));
 const deployBranch = "gh-pages";
-const staticDir = join(root, "docs");
+const mintlifySiteDir = join(root, "mintlify-site");
 const worktreeDir = join(root, ".deploy-gh-pages");
 
 function git(args, options = {}) {
@@ -46,7 +46,7 @@ function removeDeployWorktree() {
   }
 }
 
-execFileSync(process.execPath, ["scripts/build-static.mjs"], { cwd: root, stdio: "inherit" });
+execFileSync(process.execPath, ["scripts/build-mintlify.mjs"], { cwd: root, stdio: "inherit" });
 
 removeDeployWorktree();
 git(["worktree", "prune"]);
@@ -63,12 +63,12 @@ if (remoteBranchExists()) {
 
 git(["rm", "-r", "-f", "--ignore-unmatch", "."], { cwd: worktreeDir, stdio: "inherit" });
 git(["clean", "-fdx"], { cwd: worktreeDir, stdio: "inherit" });
-await cp(staticDir, worktreeDir, { recursive: true });
+await cp(mintlifySiteDir, worktreeDir, { recursive: true });
 
 git(["add", "-A"], { cwd: worktreeDir, stdio: "inherit" });
 
 if (!hasDeployChanges()) {
-  console.log(`${deployBranch} already matches ${staticDir}`);
+  console.log(`${deployBranch} already matches ${mintlifySiteDir}`);
 } else {
   const sourceCommit = git(["rev-parse", "--short", "HEAD"]).trim();
   git(["commit", "-m", `Deploy static site from ${sourceCommit}`], { cwd: worktreeDir, stdio: "inherit" });

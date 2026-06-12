@@ -201,13 +201,44 @@ test("build script generates deployable static files in docs", () => {
   assert.match(builtHtml, /<script src="\.\/src\/resume-data\.js"><\/script>/);
 });
 
-test("publish script syncs docs to the gh-pages branch root", () => {
+test("build script generates a Mintlify-compatible documentation site", () => {
+  const packageJson = JSON.parse(readProjectFile("package.json"));
+
+  assert.equal(packageJson.scripts["build:mintlify"], "node scripts/build-mintlify.mjs");
+
+  rmSync(join(root, "mintlify-site"), { recursive: true, force: true });
+  execFileSync(process.execPath, ["scripts/build-mintlify.mjs"], { cwd: root, stdio: "pipe" });
+
+  for (const path of [
+    "mintlify-site/docs.json",
+    "mintlify-site/index.mdx",
+    "mintlify-site/resume.mdx",
+    "mintlify-site/projects.mdx",
+    "mintlify-site/contact.mdx",
+    "mintlify-site/img/avator.png",
+  ]) {
+    assert.equal(existsSync(join(root, path)), true, `${path} should be generated`);
+  }
+
+  const docsConfig = JSON.parse(readProjectFile("mintlify-site/docs.json"));
+  assert.equal(docsConfig.name, "叶翔");
+  assert.deepEqual(docsConfig.navigation.tabs[0].groups[0].pages, ["index", "resume", "projects", "contact"]);
+
+  const homePage = readProjectFile("mintlify-site/index.mdx");
+  assert.match(homePage, /title: "自动化开发工程师"/);
+  assert.match(homePage, /!\[叶翔头像\]\(\/img\/avator\.png\)/);
+  assert.match(homePage, /工业自动化/);
+});
+
+test("publish script syncs Mintlify files to the gh-pages branch root", () => {
   const packageJson = JSON.parse(readProjectFile("package.json"));
   const publishScript = readProjectFile("scripts/publish-static-branch.mjs");
 
   assert.equal(packageJson.scripts["publish:static"], "node scripts/publish-static-branch.mjs");
+  assert.equal(packageJson.scripts["publish:mintlify"], "node scripts/publish-static-branch.mjs");
   assert.match(publishScript, /const deployBranch = "gh-pages"/);
-  assert.match(publishScript, /const staticDir = join\(root, "docs"\)/);
+  assert.match(publishScript, /const mintlifySiteDir = join\(root, "mintlify-site"\)/);
+  assert.match(publishScript, /\["scripts\/build-mintlify\.mjs"\]/);
   assert.match(publishScript, /git\(\["worktree", "remove", "--force", worktreeDir\]/);
   assert.match(publishScript, /git\(\["rm", "-r", "-f", "--ignore-unmatch", "\."\]/);
   assert.match(publishScript, /git\(\["push", "-u", "origin", deployBranch\]/);

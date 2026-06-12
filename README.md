@@ -29,10 +29,10 @@ npm run build
 
 静态文件会生成到 `docs/`，GitHub Pages 可选择 `main` 分支的 `/docs` 目录作为发布来源。
 
-如需直接用分支根目录部署：
+如需发布到 Mintlify 绑定的 `gh-pages` 分支：
 
 ```bash
-npm run publish:static
+npm run publish:mintlify
 ```
 
-该命令会先生成 `docs/`，再把 `docs/` 内的静态文件同步到 `gh-pages` 分支根目录并推送。
+该命令会先生成 `mintlify-site/`，再把 `docs.json`、MDX 页面和图片同步到 `gh-pages` 分支根目录并推送。
