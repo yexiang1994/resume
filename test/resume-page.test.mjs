@@ -215,6 +215,7 @@ test("build script generates a Mintlify-compatible documentation site", () => {
     "mintlify-site/resume.mdx",
     "mintlify-site/projects.mdx",
     "mintlify-site/contact.mdx",
+    "mintlify-site/style.css",
     "mintlify-site/img/avator.png",
   ]) {
     assert.equal(existsSync(join(root, path)), true, `${path} should be generated`);
@@ -228,6 +229,21 @@ test("build script generates a Mintlify-compatible documentation site", () => {
   assert.match(homePage, /title: "自动化开发工程师"/);
   assert.match(homePage, /!\[叶翔头像\]\(\/img\/avator\.png\)/);
   assert.match(homePage, /工业自动化/);
+});
+
+test("Mintlify homepage uses a 100px avatar and hides search inputs", () => {
+  rmSync(join(root, "mintlify-site"), { recursive: true, force: true });
+  execFileSync(process.execPath, ["scripts/build-mintlify.mjs"], { cwd: root, stdio: "pipe" });
+
+  const homePage = readProjectFile("mintlify-site/index.mdx");
+  const customCss = readProjectFile("mintlify-site/style.css");
+
+  assert.match(homePage, /<img[\s\S]*src="\/img\/avator\.png"[\s\S]*width:\s*'100px'/);
+  assert.match(homePage, /height:\s*'100px'/);
+  assert.match(customCss, /#search-bar-entry/);
+  assert.match(customCss, /#search-bar-entry-mobile/);
+  assert.match(customCss, /chat-assistant-floating-input/);
+  assert.match(customCss, /display:\s*none\s*!important/);
 });
 
 test("publish script syncs Mintlify files to the gh-pages branch root", () => {
